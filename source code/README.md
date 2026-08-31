@@ -3,7 +3,7 @@
 A full-stack-ready **Spring Boot REST API** implementing a complete Library Management System,
 built to satisfy the MCS-313 Advanced Java Programming final assignment requirements.
 
-## Project Description
+## Project description
 The system manages books, authors, categories, members, and loans (borrow/return) for a library.
 It demonstrates layered architecture, Spring Data JPA, JWT-based authentication with
 role-based access control, validation & exception handling, search/filter/sort/pagination,
@@ -57,7 +57,7 @@ src/main/java/com/library/lms/
 └── aspect/          AuditAspect (AOP logging)
 ```
 
-## Default Login Credentials
+## Default login credentials
 Seeded automatically on first run by `DataSeeder`:
 
 | Username    | Password    | Role      |
@@ -66,12 +66,12 @@ Seeded automatically on first run by `DataSeeder`:
 | librarian   | Lib@1234    | LIBRARIAN |
 | member      | Member@123  | MEMBER    |
 
-## Software Requirements
+## Software requirements
 - JDK 17+
 - Apache Maven 3.8+
 - No external DB required (uses embedded/file-based H2)
 
-## How to Configure and Run
+## Steps to configure and run the application
 
 ```bash
 # 1. Extract the project and navigate into it
