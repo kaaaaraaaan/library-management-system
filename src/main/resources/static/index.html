@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+    <style>
+        .sidebar-item.active { background-color: #2563eb; color: white; }
+        .sidebar-item:hover:not(.active) { background-color: #334155; }
+        .spinner { width: 36px; height: 36px; border: 3px solid #e2e8f0; border-top-color: #2563eb; border-radius: 50%; animation: spin 0.7s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .toast { animation: slideIn 0.25s ease-out; }
+        @keyframes slideIn { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100 antialiased">
+
+<!-- ===== LOGIN PAGE ===== -->
+<div id="login-page" class="min-h-screen bg-gradient-to-br from-slate-800 via-slate-700 to-blue-900 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-2xl mb-4">
+                <i class="fas fa-book-open text-blue-600 text-2xl"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-800">Library Management</h1>
+            <p class="text-gray-400 text-sm mt-1">MCS-313 Final Project</p>
+        </div>
+        <form id="login-form" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Username</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-user text-sm"></i></span>
+                    <input id="login-username" type="text" placeholder="Enter username" autocomplete="username"
+                        class="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-lock text-sm"></i></span>
+                    <input id="login-password" type="password" placeholder="Enter password" autocomplete="current-password"
+                        class="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+            </div>
+            <div id="login-error" class="hidden bg-red-50 border border-red-200 rounded-xl p-3 text-red-600 text-sm flex items-center gap-2">
+                <i class="fas fa-exclamation-circle"></i> <span id="login-error-msg"></span>
+            </div>
+            <button type="submit" id="login-btn"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 mt-2">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+        </form>
+        <div class="mt-6 p-4 bg-gray-50 rounded-xl">
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Demo Credentials</p>
+            <div class="space-y-2 text-sm">
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-500">Admin</span>
+                    <button onclick="fillLogin('admin','Admin@123')" class="text-blue-600 hover:text-blue-700 font-mono text-xs bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded transition-colors">admin / Admin@123</button>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-500">Librarian</span>
+                    <button onclick="fillLogin('librarian','Lib@1234')" class="text-blue-600 hover:text-blue-700 font-mono text-xs bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded transition-colors">librarian / Lib@1234</button>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-500">Member</span>
+                    <button onclick="fillLogin('member','Member@123')" class="text-blue-600 hover:text-blue-700 font-mono text-xs bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded transition-colors">member / Member@123</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MAIN APP ===== -->
+<div id="app" class="hidden h-screen flex overflow-hidden">
+
+    <!-- Sidebar -->
+    <div class="w-60 bg-slate-800 text-white flex flex-col flex-shrink-0">
+        <div class="p-4 border-b border-slate-700">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-book text-white text-xs"></i>
+                </div>
+                <div><div class="font-bold text-sm">LMS Portal</div><div class="text-slate-400 text-xs">Library Management</div></div>
+            </div>
+        </div>
+        <div class="px-4 py-3 border-b border-slate-700">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" id="sidebar-avatar">A</div>
+                <div class="min-w-0"><div class="text-sm font-medium truncate" id="sidebar-username">User</div><div class="text-slate-400 text-xs" id="sidebar-role">ROLE</div></div>
+            </div>
+        </div>
+        <nav class="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto text-sm">
+            <a class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-slate-300 transition-colors" data-page="dashboard" href="#/dashboard">
+                <i class="fas fa-tachometer-alt w-4 text-center text-sm"></i> Dashboard
+            </a>
+            <div class="px-3 pt-3 pb-1"><span class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Catalog</span></div>
+            <a class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-slate-300 transition-colors" data-page="books" href="#/books">
+                <i class="fas fa-book w-4 text-center text-sm"></i> Books
+            </a>
+            <a class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-slate-300 transition-colors" data-page="authors" href="#/authors">
+                <i class="fas fa-pen-nib w-4 text-center text-sm"></i> Authors
+            </a>
+            <a class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-slate-300 transition-colors" data-page="categories" href="#/categories">
+                <i class="fas fa-tags w-4 text-center text-sm"></i> Categories
+            </a>
+            <div class="librarian-only px-3 pt-3 pb-1"><span class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Circulation</span></div>
+            <a class="librarian-only sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-slate-300 transition-colors" data-page="members" href="#/members">
+                <i class="fas fa-users w-4 text-center text-sm"></i> Members
+            </a>
+            <a class="librarian-only sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-slate-300 transition-colors" data-page="loans" href="#/loans">
+                <i class="fas fa-exchange-alt w-4 text-center text-sm"></i> Loans
+            </a>
+            <div class="librarian-only px-3 pt-3 pb-1"><span class="text-slate-500 text-xs font-semibold uppercase tracking-wider">System</span></div>
+            <a class="librarian-only sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-slate-300 transition-colors" data-page="reports" href="#/reports">
+                <i class="fas fa-chart-bar w-4 text-center text-sm"></i> Reports
+            </a>
+            <a class="sidebar-item admin-only flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-slate-300 transition-colors" data-page="audit" href="#/audit">
+                <i class="fas fa-shield-alt w-4 text-center text-sm"></i> Audit Logs
+            </a>
+        </nav>
+        <div class="p-3 border-t border-slate-700">
+            <button id="logout-btn" class="w-full flex items-center gap-3 px-3 py-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg text-sm transition-colors">
+                <i class="fas fa-sign-out-alt w-4 text-center text-sm"></i> Sign Out
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden bg-gray-50">
+        <header class="bg-white border-b border-gray-200 px-6 py-3.5 flex items-center justify-between flex-shrink-0 shadow-sm">
+            <div>
+                <h1 id="page-title" class="text-lg font-semibold text-gray-800">Dashboard</h1>
+                <p id="page-subtitle" class="text-xs text-gray-400 mt-0.5">Overview</p>
+            </div>
+            <div class="text-sm text-gray-400" id="header-date"></div>
+        </header>
+        <main id="page-content" class="flex-1 overflow-auto p-6">
+            <div class="flex items-center justify-center h-full"><div class="spinner"></div></div>
+        </main>
+    </div>
+</div>
+
+<!-- ===== MODAL ===== -->
+<div id="modal-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div id="modal-box" class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b">
+            <h3 id="modal-title" class="text-base font-semibold text-gray-800"></h3>
+            <button id="modal-close" class="text-gray-400 hover:text-gray-600 w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors">
+                <i class="fas fa-times text-sm"></i>
+            </button>
+        </div>
+        <div id="modal-body" class="px-6 py-5"></div>
+        <div id="modal-footer" class="px-6 pb-5 flex justify-end gap-2"></div>
+    </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
