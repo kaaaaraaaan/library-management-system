@@ -20,7 +20,7 @@ and five additional advanced features.
 - JWT-based authentication and role-based authorization (`ADMIN`, `LIBRARIAN`, `MEMBER`).
 - Search, filtering, sorting, and pagination on Book, Member, and Loan endpoints
   using Spring Data `Specification` + `Pageable`.
-- Well-documented REST API with consistent `ApiResponse<T>` envelope.
+- Well-documented REST API with consistent `ApiResponse<T>` envelope and interactive Swagger UI.
 
 ### Additional Features (5 implemented — exceeds the minimum of 3)
 1. **File upload/download** — book cover image upload, served as a static resource.
@@ -37,6 +37,7 @@ and five additional advanced features.
 - Spring Web, Spring Data JPA, Spring Security, Spring Validation, Spring AOP, Spring Mail
 - H2 Database (file-based)
 - JWT (io.jsonwebtoken)
+- Springdoc OpenAPI (Swagger UI)
 - iText (PDF), OpenCSV (CSV)
 - Lombok, Maven
 
@@ -85,9 +86,10 @@ mvn spring-boot:run
 
 The API will start on **http://localhost:8080**.
 
-- H2 console: `http://localhost:8080/h2-console`
+- **Swagger UI (Interactive API Docs)**: `http://localhost:8080/swagger-ui.html`
+- **H2 console**: `http://localhost:8080/h2-console`
   (JDBC URL: `jdbc:h2:file:./data/lmsdb`, user: `sa`, password: empty)
-- Login endpoint: `POST /api/auth/login` with `{"username":"admin","password":"Admin@123"}`
+- **Login endpoint**: `POST /api/auth/login` with `{"username":"admin","password":"Admin@123"}`
   → copy the returned `token` and send it as `Authorization: Bearer <token>` on subsequent requests.
 
 ## Key API Endpoints
