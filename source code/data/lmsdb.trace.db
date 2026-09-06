@@ -1,0 +1,12 @@
+2026-09-06 07:53:29.912340+05:45 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM AUTHOR BOOK [*]ID"; SQL statement:
+SELECT * FROM AUTHOR BOOK ID [42000-224]
+2026-09-06 07:53:39.016633+05:45 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM AUTHOR BOOK [*]ID"; SQL statement:
+SELECT * FROM AUTHOR BOOK ID [42000-224]
+2026-09-06 07:54:57.062692+05:45 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "AUTHORID" not found; SQL statement:
+SELECT * FROM AUTHORID [42102-224]
+2026-09-06 07:55:02.102201+05:45 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "AUTHORID" not found; SQL statement:
+SELECT * FROM AUTHORID [42102-224]

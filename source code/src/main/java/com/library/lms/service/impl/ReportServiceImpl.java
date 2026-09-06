@@ -11,6 +11,7 @@ import com.library.lms.repository.LoanRepository;
 import com.opencsv.CSVWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
@@ -24,6 +25,7 @@ public class ReportServiceImpl implements com.library.lms.service.ReportService 
     private final BookRepository bookRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public ByteArrayOutputStream generateLoansPdfReport() {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
@@ -63,6 +65,7 @@ public class ReportServiceImpl implements com.library.lms.service.ReportService 
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ByteArrayOutputStream generateBooksCsvReport() {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try (CSVWriter writer = new CSVWriter(new OutputStreamWriter(out))) {

@@ -9,6 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,6 +32,7 @@ public class OverdueLoanScheduler {
 
     // Runs every day at 8:00 AM
     @Scheduled(cron = "0 0 8 * * *")
+    @Transactional
     public void checkOverdueLoans() {
         List<Loan> overdue = loanRepository.findOverdueLoans(LocalDate.now());
         for (Loan loan : overdue) {
